@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💌 Para mi Princesa</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💌</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Dancing+Script:wght@500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── TOKENS ── */
+    :root {
+      --rose:       #C8719A;
+      --rose-light: #F7C5D0;
+      --rose-pale:  #FFF0F5;
+      --gold:       #D4AF37;
+      --ink:        #3D2C35;
+      --ink-soft:   #6B4F5C;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-script:  'Dancing Script', cursive;
+      --font-body:    'Lato', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--rose-pale); color: var(--ink); overflow-x: hidden; }
+
+    /* ── SCENE ── */
+    .scene {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(ellipse at 50% 40%, #fde8f0 0%, #f7c5d0 35%, #e8a0b8 70%, #c87199 100%);
+      z-index: 100;
+      transition: opacity 0.6s ease;
+    }
+    .scene.hidden { opacity: 0; pointer-events: none; }
+
+    /* Intro */
+    .intro { text-align: center; animation: fadeUp 1s ease both; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px) scale(0.92); }
+      to   { opacity: 1; transform: none; }
+    }
+    .eyebrow {
+      font-family: var(--font-script); font-size: 1.3rem;
+      color: var(--rose); margin-bottom: 0.5rem;
+    }
+    .title-big {
+      font-family: var(--font-display); font-weight: 700;
+      font-size: clamp(3rem, 10vw, 6rem);
+      color: #fff; line-height: 1.08;
+      text-shadow: 0 4px 24px rgba(100,30,60,.25);
+      margin-bottom: 0.5rem;
+    }
+    .title-princess {
+      font-family: var(--font-script); font-style: normal;
+      font-size: clamp(3.5rem, 12vw, 7rem);
+      color: var(--gold);
+      filter: drop-shadow(0 2px 8px rgba(212,175,55,.5));
+      display: block;
+    }
+    .subtitle-intro {
+      font-family: var(--font-display); font-style: italic;
+      font-size: 1.2rem; color: rgba(255,255,255,.85); margin-bottom: 2.2rem;
+    }
+    .btn-ver {
+      background: #fff; color: var(--rose);
+      border: 2px solid var(--rose-light);
+      padding: .85rem 2.6rem; border-radius: 50px;
+      font-family: var(--font-display); font-size: 1.05rem; font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 30px rgba(200,113,154,.3);
+      transition: all .25s;
+    }
+    .btn-ver:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 14px 40px rgba(200,113,154,.45); }
+
+    /* Envelope */
+    .env-wrap { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; animation: fadeUp .7s ease both; }
+    .env-hint { font-family: var(--font-script); font-size: 1.4rem; color: rgba(255,255,255,.9); }
+    .envelope { cursor: pointer; filter: drop-shadow(0 16px 48px rgba(100,30,60,.35)); transition: transform .3s; }
+    .envelope:hover { transform: scale(1.06) rotate(-1deg); }
+    .env-body { position: relative; width: 240px; height: 180px; }
+    .env-front {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #fff9fb, #fde8f0);
+      border-radius: 6px 6px 10px 10px;
+      border: 2px solid rgba(200,113,154,.3);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: .5rem; overflow: hidden;
+    }
+    .env-flap {
+      position: absolute; top: 0; left: 0; width: 240px; height: 0;
+      border-left: 120px solid transparent; border-right: 120px solid transparent;
+      border-top: 90px solid #f9d0dd; z-index: 2;
+      filter: drop-shadow(0 4px 6px rgba(200,113,154,.18));
+    }
+    .env-front::before {
+      content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 0;
+      border-left: 120px solid transparent; border-right: 120px solid transparent;
+      border-bottom: 80px solid rgba(248,200,215,.5);
+    }
+    .env-front::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom right, transparent 49.5%, rgba(240,185,205,.4) 50%),
+                  linear-gradient(to bottom left,  transparent 49.5%, rgba(240,185,205,.4) 50%);
+    }
+    .env-heart { font-size: 2.8rem; z-index: 3; position: relative; animation: hb 1.4s ease-in-out infinite; }
+    @keyframes hb { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
+    .env-seal {
+      font-family: var(--font-script); font-size: 1rem; color: var(--rose);
+      z-index: 3; position: relative;
+      background: rgba(255,255,255,.8); padding: .15rem .9rem;
+      border-radius: 20px; border: 1px solid var(--rose-light);
+    }
+
+    /* Canvas */
+    #flower-canvas {
+      position: fixed; inset: 0; z-index: 200;
+      background: radial-gradient(ellipse at center, #fde8f0 0%, #f7c5d0 40%, #e8a0b8 100%);
+      display: none;
+    }
+
+    /* ── LANDING ── */
+    #landing { display: none; }
+
+    /* Hero */
+    .l-hero {
+      position: relative; min-height: 90vh;
+      background: radial-gradient(ellipse at 50% 30%, #fff0f5 0%, #fbd0de 45%, #c8719a 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; overflow: hidden; padding: 4rem 1.5rem;
+    }
+    .hero-petals { position: absolute; inset: 0; pointer-events: none; }
+    .hero-petal { position: absolute; font-size: 2rem; animation: fp 7s ease-in-out infinite; opacity: .6; }
+    .hero-petal:nth-child(1){top:10%;left:8%;animation-delay:0s}
+    .hero-petal:nth-child(2){top:15%;right:10%;animation-delay:1s;animation-duration:8s}
+    .hero-petal:nth-child(3){bottom:20%;left:12%;animation-delay:2s;animation-duration:6s}
+    .hero-petal:nth-child(4){bottom:15%;right:8%;animation-delay:.5s;animation-duration:9s}
+    .hero-petal:nth-child(5){top:40%;left:4%;animation-delay:1.5s}
+    @keyframes fp { 0%,100%{transform:translateY(0) rotate(0)} 33%{transform:translateY(-18px) rotate(8deg)} 66%{transform:translateY(10px) rotate(-5deg)} }
+    .hero-cnt { position: relative; z-index: 2; animation: fadeUp 1s ease both .3s; }
+    .hero-eyebrow { font-family: var(--font-script); font-size: 1.3rem; color: var(--rose); margin-bottom: .75rem; }
+    .hero-h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(3rem,9vw,5.5rem); color: var(--ink); line-height: 1.08; margin-bottom: 1rem; }
+    .hero-h1 em { font-family: var(--font-script); color: var(--rose); font-style: normal; font-size: clamp(3.5rem,11vw,6.5rem); }
+    .hero-sub { font-family: var(--font-display); font-style: italic; font-size: 1.2rem; color: var(--ink-soft); }
+    .scroll-hint { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: .4rem; color: var(--ink-soft); font-size: .82rem; letter-spacing: .1em; text-transform: uppercase; opacity: .7; }
+    .scroll-arr { font-size: 1.3rem; animation: bounce 1.8s ease-in-out infinite; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+
+    /* Cards */
+    .cards-section { padding: 5rem 1.5rem 3rem; max-width: 1200px; margin: 0 auto; }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; }
+    .wide-section { padding: 2rem 1.5rem 5rem; max-width: 1200px; margin: 0 auto; }
+
+    .card {
+      position: relative; border-radius: 4px; padding: .6rem;
+      box-shadow: 0 4px 24px rgba(60,20,40,.1), 0 1px 4px rgba(60,20,40,.06);
+      opacity: 0; transform: translateY(30px);
+      transition: opacity .7s ease, transform .7s ease, box-shadow .3s ease;
+    }
+    .card.vis { opacity: 1; transform: none; }
+    .card:hover { box-shadow: 0 12px 48px rgba(60,20,40,.15), 0 4px 12px rgba(60,20,40,.08); transform: translateY(-4px); }
+
+    /* Corners */
+    .cc { position: absolute; width: 22px; height: 22px; border-color: var(--gold); border-style: solid; opacity: .5; }
+    .cc-tl { top:8px;left:8px;border-width:2px 0 0 2px }
+    .cc-tr { top:8px;right:8px;border-width:2px 2px 0 0 }
+    .cc-bl { bottom:8px;left:8px;border-width:0 0 2px 2px }
+    .cc-br { bottom:8px;right:8px;border-width:0 2px 2px 0 }
+
+    .card-in {
+      padding: 2.2rem 2rem; border-radius: 2px;
+      position: relative; min-height: 400px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .card.wide .card-in { min-height: 560px; }
+    .c-icon { font-size: 2.4rem; margin-bottom: .5rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,.12)); }
+    .c-orn { font-family: var(--font-body); font-size: .75rem; letter-spacing: .18em; color: var(--gold); margin-bottom: .8rem; }
+    .c-title { font-family: var(--font-display); font-size: 1.55rem; font-weight: 600; color: var(--ink); text-align: center; line-height: 1.2; margin-bottom: .4rem; }
+    .c-subtitle { font-family: var(--font-display); font-style: italic; font-size: 1rem; color: var(--ink-soft); text-align: center; margin-bottom: .8rem; }
+    .c-div { width: 60px; height: 1.5px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: .8rem auto 1.4rem; }
+    .c-lines { width: 100%; display: flex; flex-direction: column; gap: .75rem; flex: 1; }
+    .c-line { width: 100%; height: 1px; border-bottom: 1px dashed rgba(0,0,0,.12); }
+    .c-ph { position: absolute; bottom: 2rem; left: 2rem; right: 2rem; font-family: var(--font-display); font-style: italic; font-size: .88rem; color: rgba(61,44,53,.33); text-align: center; line-height: 1.7; pointer-events: none; }
+
+    /* Themes */
+    .c-rose   { background: linear-gradient(150deg,#fff9fb,#fde8f2,#fad0e0); border: 1.5px solid rgba(200,113,154,.25); }
+    .c-rose .cc { border-color:#c8719a; }
+    .c-rose .c-title { color:#7a2d4f; }
+    .c-rose .c-div   { background: linear-gradient(to right,transparent,#c8719a,transparent); }
+
+    .c-lavender { background: linear-gradient(150deg,#fbf8ff,#ede5ff,#ddd0f8); border:1.5px solid rgba(180,150,220,.3); }
+    .c-lavender .cc { border-color:#9b72cf; }
+    .c-lavender .c-title { color:#5b3a7e; }
+    .c-lavender .c-div { background: linear-gradient(to right,transparent,#9b72cf,transparent); }
+
+    .c-gold { background: linear-gradient(150deg,#fffdf5,#faf0d0,#f5e4a8); border:1.5px solid rgba(212,175,55,.4); }
+    .c-gold .cc { border-color:#d4af37; opacity:.6; }
+    .c-gold .c-title { color:#7a6010; }
+    .c-gold .c-div { background: linear-gradient(to right,transparent,#d4af37,transparent); }
+
+    .c-mint { background: linear-gradient(150deg,#f4fff4,#d8f5d4,#bfeab9); border:1.5px solid rgba(100,180,100,.3); }
+    .c-mint .cc { border-color:#6da86a; }
+    .c-mint .c-title { color:#2d5e2a; }
+    .c-mint .c-div { background: linear-gradient(to right,transparent,#6da86a,transparent); }
+
+    .c-blush { background: linear-gradient(150deg,#fff8f5,#fde5da,#f9ccba); border:1.5px solid rgba(220,130,100,.3); }
+    .c-blush .cc { border-color:#d4845a; }
+    .c-blush .c-title { color:#7a3a20; }
+    .c-blush .c-div { background: linear-gradient(to right,transparent,#d4845a,transparent); }
+
+    .c-sky { background: linear-gradient(150deg,#f4fbff,#d8eef8,#b8ddf5); border:1.5px solid rgba(90,160,210,.3); }
+    .c-sky .cc { border-color:#5aa0d2; }
+    .c-sky .c-title { color:#1c4f78; }
+    .c-sky .c-div { background: linear-gradient(to right,transparent,#5aa0d2,transparent); }
+
+    .c-parchment {
+      background:
+        repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(200,113,154,.08) 31px,rgba(200,113,154,.08) 32px),
+        linear-gradient(160deg,#fffdf5,#faf5e0,#f5edcc);
+      border:2px solid rgba(212,175,55,.45);
+    }
+    .c-parchment .cc { border-color:#d4af37; opacity:.7; width:28px; height:28px; }
+    .c-parchment .c-title { color:#5c4000; font-size:1.9rem; }
+    .c-parchment .c-div { width:100px; }
+    .c-parchment .c-ph { font-size:.92rem; bottom:2.5rem; }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(to bottom, #f7c5d0, #c8719a);
+      padding: 3rem 1.5rem 2.5rem; text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: .6rem;
+    }
+    .f-flowers { display: flex; gap: .6rem; font-size: 1.6rem; margin-bottom: .5rem; animation: fp 4s ease-in-out infinite; }
+    .f-text { font-family: var(--font-display); font-size: 1.3rem; color: #fff; text-shadow: 0 1px 4px rgba(100,30,60,.25); }
+    .f-heart { display: inline-block; animation: hb 1.4s ease-in-out infinite; }
+    .f-sub { font-family: var(--font-script); font-size: 1.05rem; color: rgba(255,255,255,.85); }
+
+    @media(max-width:640px) {
+      .cards-grid { grid-template-columns:1fr; }
+      .card-in { padding:1.8rem 1.4rem; min-height:360px; }
+      .card.wide .card-in { min-height:480px; }
+    }
+    @media(prefers-reduced-motion:reduce) { .hero-petal,.scroll-arr,.f-flowers,.env-heart,.f-heart{ animation:none; } }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════ SCENE (overlay) ════════════════════ -->
+<div class="scene" id="scene">
+
+  <!-- INTRO -->
+  <div class="intro" id="intro-view">
+    <p class="eyebrow">✨ Un mensajito especial ✨</p>
+    <h1 class="title-big">
+      Hola, mi<br>
+      <span class="title-princess">Princesa</span>
+    </h1>
+    <p class="subtitle-intro">Tengo un mensaje para ti</p>
+    <button class="btn-ver" id="btn-ver">Ver 💌</button>
+  </div>
+
+  <!-- ENVELOPE -->
+  <div class="env-wrap" id="env-view" style="display:none">
+    <p class="env-hint">Toca el sobre para abrirlo 🌸</p>
+    <div class="envelope" id="envelope">
+      <div class="env-body">
+        <div class="env-flap"></div>
+        <div class="env-front">
+          <div class="env-heart">💌</div>
+          <div class="env-seal">Para ti</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Canvas for flowers -->
+<canvas id="flower-canvas"></canvas>
+
+<!-- ════════════════════ LANDING ════════════════════ -->
+<div id="landing">
+
+  <!-- Hero -->
+  <section class="l-hero">
+    <div class="hero-petals">
+      <span class="hero-petal">🌸</span>
+      <span class="hero-petal">🌺</span>
+      <span class="hero-petal">🌷</span>
+      <span class="hero-petal">💐</span>
+      <span class="hero-petal">🪷</span>
+    </div>
+    <div class="hero-cnt">
+      <p class="hero-eyebrow">💌 Cartas con amor</p>
+      <h1 class="hero-h1">Para ti,<br><em>mi princesa</em></h1>
+      <p class="hero-sub">Cada carta guarda un pedacito de lo que siento</p>
+    </div>
+    <div class="scroll-hint">
+      <span>Descubre las cartas</span>
+      <div class="scroll-arr">↓</div>
+    </div>
+  </section>
+
+  <!-- Cards grid -->
+  <section class="cards-section">
+    <div class="cards-grid">
+
+      <!-- Card 1 - Rose -->
+      <article class="card c-rose">
+        <div class="cc cc-tl"></div><div class="cc cc-tr"></div>
+        <div class="cc cc-bl"></div><div class="cc cc-br"></div>
+        <div class="card-in">
+          <div class="c-icon">🌹</div>
+          <div class="c-orn">— ✦ —</div>
+          <h2 class="c-title">Mi razón de sonreír</h2>
+          <div class="c-div"></div>
+          <div class="c-lines">
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+          </div>
+          <p class="c-ph">Escribe aquí tu carta... Este espacio es tuyo para llenarlo con palabras que vengan del alma.</p>
+        </div>
+      </article>
+
+      <!-- Card 2 - Lavender -->
+      <article class="card c-lavender">
+        <div class="cc cc-tl"></div><div class="cc cc-tr"></div>
+        <div class="cc cc-bl"></div><div class="cc cc-br"></div>
+        <div class="card-in">
+          <div class="c-icon">💜</div>
+          <div class="c-orn">— ✦ —</div>
+          <h2 class="c-title">Lo que siento por ti</h2>
+          <div class="c-div"></div>
+          <div class="c-lines">
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+          </div>
+          <p class="c-ph">Escribe aquí tu carta... Deja que las palabras fluyan desde el corazón sin miedo.</p>
+        </div>
+      </article>
+
+      <!-- Card 3 - Gold -->
+      <article class="card c-gold">
+        <div class="cc cc-tl"></div><div class="cc cc-tr"></div>
+        <div class="cc cc-bl"></div><div class="cc cc-br"></div>
+        <div class="card-in">
+          <div class="c-icon">✨</div>
+          <div class="c-orn">— ✦ —</div>
+          <h2 class="c-title">Mis promesas para ti</h2>
+          <div class="c-div"></div>
+          <div class="c-lines">
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+          </div>
+          <p class="c-ph">Escribe aquí tu carta... Cada promesa es un lazo que nos une más cada día.</p>
+        </div>
+      </article>
+
+      <!-- Card 4 - Mint -->
+      <article class="card c-mint">
+        <div class="cc cc-tl"></div><div class="cc cc-tr"></div>
+        <div class="cc cc-bl"></div><div class="cc cc-br"></div>
+        <div class="card-in">
+          <div class="c-icon">🌿</div>
+          <div class="c-orn">— ✦ —</div>
+          <h2 class="c-title">Lo que me enamora de ti</h2>
+          <div class="c-div"></div>
+          <div class="c-lines">
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+          </div>
+          <p class="c-ph">Escribe aquí tu carta... Hay tantas cosas hermosas en ti que necesito decirte.</p>
+        </div>
+      </article>
+
+      <!-- Card 5 - Blush -->
+      <article class="card c-blush">
+        <div class="cc cc-tl"></div><div class="cc cc-tr"></div>
+        <div class="cc cc-bl"></div><div class="cc cc-br"></div>
+        <div class="card-in">
+          <div class="c-icon">🌸</div>
+          <div class="c-orn">— ✦ —</div>
+          <h2 class="c-title">Nuestro mundo</h2>
+          <div class="c-div"></div>
+          <div class="c-lines">
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+          </div>
+          <p class="c-ph">Escribe aquí tu carta... Este espacio es para hablar de todo lo que construimos juntos.</p>
+        </div>
+      </article>
+
+      <!-- Card 6 - Sky -->
+      <article class="card c-sky">
+        <div class="cc cc-tl"></div><div class="cc cc-tr"></div>
+        <div class="cc cc-bl"></div><div class="cc cc-br"></div>
+        <div class="card-in">
+          <div class="c-icon">🕊️</div>
+          <div class="c-orn">— ✦ —</div>
+          <h2 class="c-title">Para cuando estés lejos</h2>
+          <div class="c-div"></div>
+          <div class="c-lines">
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+            <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+          </div>
+          <p class="c-ph">Escribe aquí tu carta... Aunque la distancia exista, mis palabras siempre llegarán hasta ti.</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- Wide card -->
+  <section class="wide-section">
+    <article class="card wide c-parchment">
+      <div class="cc cc-tl"></div><div class="cc cc-tr"></div>
+      <div class="cc cc-bl"></div><div class="cc cc-br"></div>
+      <div class="card-in">
+        <div class="c-icon">📜</div>
+        <div class="c-orn">— ✦ ❤ ✦ —</div>
+        <h2 class="c-title">Mi carta más larga para ti</h2>
+        <p class="c-subtitle">Aquí puedes escribir todo lo que has guardado en el corazón</p>
+        <div class="c-div"></div>
+        <div class="c-lines">
+          <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+          <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+          <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+          <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+          <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+          <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+          <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+          <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+          <div class="c-line"></div><div class="c-line"></div><div class="c-line"></div>
+        </div>
+        <p class="c-ph">Escribe aquí tu carta más larga... Este espacio está pensado para las palabras que llevan tiempo esperando ser dichas. Para las historias que merecen ser contadas sin prisa, para los sentimientos que necesitan más que unas pocas líneas. Todo tuyo.</p>
+      </div>
+    </article>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="f-flowers">🌸💐🌺🌷🌸</div>
+    <p class="f-text">Hecho con <span class="f-heart">❤️</span> by <strong>Stiven</strong></p>
+    <p class="f-sub">Para la persona más especial de mi mundo</p>
+  </footer>
+
+</div>
+
+<script>
+const FLOWERS = ["🌸","🌺","🌼","🌷","🌹","💐","🌻","🪷","💮","🏵️"];
+
+function rnd(a,b){ return a + Math.random()*(b-a); }
+
+/* ── STATE ── */
+let phase = "intro";
+
+const $scene      = document.getElementById("scene");
+const $introView  = document.getElementById("intro-view");
+const $envView    = document.getElementById("env-view");
+const $canvas     = document.getElementById("flower-canvas");
+const $landing    = document.getElementById("landing");
+const $btnVer     = document.getElementById("btn-ver");
+const $envelope   = document.getElementById("envelope");
+
+/* ── TRANSITIONS ── */
+$btnVer.addEventListener("click", () => showEnvelope());
+$envelope.addEventListener("click", () => startFlowers());
+
+function showEnvelope() {
+  phase = "envelope";
+  $introView.style.display = "none";
+  $envView.style.display   = "flex";
+}
+
+function startFlowers() {
+  phase = "flowers";
+  $scene.classList.add("hidden");
+  $canvas.style.display = "block";
+  runFlowerVortex();
+}
+
+function showLanding() {
+  $canvas.style.display = "none";
+  $scene.style.display  = "none";
+  $landing.style.display = "block";
+  initCards();
+}
+
+/* ── FLOWER VORTEX ── */
+function runFlowerVortex() {
+  const ctx = $canvas.getContext("2d");
+  $canvas.width  = window.innerWidth;
+  $canvas.height = window.innerHeight;
+
+  const cx = $canvas.width / 2;
+  const cy = $canvas.height / 2;
+
+  const particles = [];
+  const TOTAL = 90;
+
+  for (let i = 0; i < TOTAL; i++) {
+    const angle = rnd(0, Math.PI * 2);
+    const speed = rnd(1.8, 4.8);
+    particles.push({
+      x: cx, y: cy,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      angle,
+      rotation: rnd(0, Math.PI * 2),
+      spin: rnd(-0.06, 0.06),
+      size: rnd(20, 40),
+      emoji: FLOWERS[Math.floor(Math.random() * FLOWERS.length)],
+      opacity: 0,
+      phase: "expand",
+      swirl: rnd(0.015, 0.04) * (Math.random() > 0.5 ? 1 : -1),
+      spawnTime: Date.now() + rnd(0, 600),
+    });
+  }
+
+  const start = Date.now();
+  let fallTriggered = false;
+  let raf;
+
+  function draw() {
+    ctx.clearRect(0, 0, $canvas.width, $canvas.height);
+    const now     = Date.now();
+    const elapsed = now - start;
+
+    if (!fallTriggered && elapsed > 2200) {
+      fallTriggered = true;
+      particles.forEach(p => {
+        p.phase = "fall";
+        p.vy = rnd(-1, 0.5);
+        p.vx = rnd(-2, 2);
+      });
+      setTimeout(() => { cancelAnimationFrame(raf); showLanding(); }, 2000);
+    }
+
+    const maxDist = Math.max($canvas.width, $canvas.height) * 0.65;
+
+    particles.forEach(p => {
+      if (now < p.spawnTime) return;
+
+      if (p.phase === "expand") {
+        p.opacity = Math.min(1, p.opacity + 0.045);
+        p.angle  += p.swirl;
+        const dist = Math.hypot(p.x - cx, p.y - cy);
+        if (dist < maxDist) {
+          p.x  += p.vx;
+          p.y  += p.vy;
+          p.vx += Math.cos(p.angle) * 0.09;
+          p.vy += Math.sin(p.angle) * 0.09;
+        } else {
+          p.phase = "hover";
+        }
+      } else if (p.phase === "hover") {
+        p.x += Math.sin(p.angle * 2) * 0.3;
+        p.y += Math.cos(p.angle * 1.5) * 0.2;
+      } else if (p.phase === "fall") {
+        p.vy       += 0.38;
+        p.vx       += (Math.random() - 0.5) * 0.1;
+        p.x        += p.vx;
+        p.y        += p.vy;
+        p.rotation += p.spin;
+        p.opacity   = Math.max(0, p.opacity - 0.012);
+      }
+
+      ctx.save();
+      ctx.globalAlpha  = p.opacity;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation);
+      ctx.font         = `${p.size}px serif`;
+      ctx.textAlign    = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(p.emoji, 0, 0);
+      ctx.restore();
+    });
+
+    raf = requestAnimationFrame(draw);
+  }
+
+  raf = requestAnimationFrame(draw);
+}
+
+/* ── CARD REVEAL ON SCROLL ── */
+function initCards() {
+  const cards = document.querySelectorAll(".card");
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("vis"); });
+  }, { threshold: 0.1 });
+  cards.forEach(c => obs.observe(c));
+}
+</script>
+</body>
+</html>
